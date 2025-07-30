@@ -6,6 +6,7 @@ var tile_size = 16
 @onready var can_move: bool = true
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var ray_cast: RayCast2D = $RayCast2D
 
 const directions = {
 	&"left": Vector2.LEFT,
@@ -16,7 +17,7 @@ const directions = {
 
 var pressed_actions: Array[StringName] = []
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	for d in directions:
 		if Input.is_action_just_pressed(d):
 			if not pressed_actions.has(d):
@@ -28,8 +29,12 @@ func _physics_process(delta: float) -> void:
 		var direction_name = pressed_actions[-1]
 		var direction = directions[direction_name]
 		animated_sprite.play(direction_name)
-		move(direction)
-		can_move = false
+		ray_cast.target_position = direction * tile_size
+		ray_cast.force_raycast_update()
+		
+		if not ray_cast.is_colliding():
+			move(direction)
+			can_move = false
 
 func move(direction: Vector2) -> void:
 	var tween = create_tween()
