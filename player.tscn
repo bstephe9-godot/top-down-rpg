@@ -63,7 +63,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_hqtel")
 }],
-"loop": false,
+"loop": true,
 "name": &"down",
 "speed": 5.0
 }, {
@@ -119,6 +119,8 @@ script = ExtResource("1_onrkg")
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_bwjto")
 animation = &"down"
+frame = 2
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false

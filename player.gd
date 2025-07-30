@@ -1,34 +1,41 @@
 extends CharacterBody2D
 
-@export var speed: float = 32.0
+var tile_size = 16
+
+@export var seconds_per_tile: float = 0.35
+@onready var can_move: bool = true
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var can_move: bool = true
-@onready var direction: Vector2
 
-const valid_directions = {
-	&"left": Vector2(-1, 0),
-	&"right": Vector2(1, 0),
-	&"up": Vector2(0, -1),
-	&"down": Vector2(0, 1)
+const directions = {
+	&"left": Vector2.LEFT,
+	&"right": Vector2.RIGHT,
+	&"up": Vector2.UP,
+	&"down": Vector2.DOWN
 }
 
-var pressed_actions = []
+var pressed_actions: Array[StringName] = []
 
-func _unhandled_key_input(_event: InputEvent) -> void:
-	for d in valid_directions:
+func _physics_process(delta: float) -> void:
+	for d in directions:
 		if Input.is_action_just_pressed(d):
 			if not pressed_actions.has(d):
 				pressed_actions.push_back(d)
 		if Input.is_action_just_released(d):
 			pressed_actions.erase(d)
-	direction = Vector2.ZERO if pressed_actions.is_empty() else valid_directions[pressed_actions[-1]]
 
-func _process(_delta: float) -> void:
-	if not pressed_actions.is_empty():
-		animated_sprite.play(pressed_actions[-1])
-	else:
+	if not pressed_actions.is_empty() and can_move:
+		var direction_name = pressed_actions[-1]
+		var direction = directions[direction_name]
+		animated_sprite.play(direction_name)
+		move(direction)
+		can_move = false
+
+func move(direction: Vector2) -> void:
+	var tween = create_tween()
+	tween.tween_property(self, "position",
+		position + direction * tile_size, seconds_per_tile)
+	tween.tween_callback(func():
+		can_move = true
 		animated_sprite.stop()
-		
-func _physics_process(delta: float) -> void:
-	position += direction * speed * delta
+	)
