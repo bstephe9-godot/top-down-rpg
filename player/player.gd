@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 var tile_size = 16
 
-@export var seconds_per_tile: float = 0.35
+@export var seconds_per_tile: float = 0.25
 @onready var can_move: bool = true
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -28,7 +28,7 @@ func _physics_process(_delta: float) -> void:
 	if not pressed_actions.is_empty() and can_move:
 		var direction_name = pressed_actions[-1]
 		var direction = directions[direction_name]
-		animated_sprite.play(direction_name)
+		start_animation(direction_name)
 		ray_cast.target_position = direction * tile_size
 		ray_cast.force_raycast_update()
 		
@@ -40,7 +40,11 @@ func move(direction: Vector2) -> void:
 	var tween = create_tween()
 	tween.tween_property(self, "position",
 		position + direction * tile_size, seconds_per_tile)
-	tween.tween_callback(func():
+	tween.tween_callback(func(): # pos doesn't move, no call
 		can_move = true
-		animated_sprite.stop()
 	)
+
+func start_animation(direction_name: String) -> void:
+	animated_sprite.play(direction_name)
+	await get_tree().create_timer(seconds_per_tile).timeout
+	animated_sprite.stop()
