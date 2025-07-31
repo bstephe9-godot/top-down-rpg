@@ -1,7 +1,7 @@
 [gd_scene load_steps=17 format=3 uid="uid://bcsqci5smoosv"]
 
-[ext_resource type="Texture2D" uid="uid://c7tvoi7x64r8m" path="res://tilemap_packed.png" id="1_4flbx"]
-[ext_resource type="Script" uid="uid://l03a5tih1kfb" path="res://player.gd" id="1_onrkg"]
+[ext_resource type="Texture2D" uid="uid://c7tvoi7x64r8m" path="res://world/tilemap_packed.png" id="1_4flbx"]
+[ext_resource type="Script" uid="uid://l03a5tih1kfb" path="res://player/player.gd" id="1_onrkg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_onrkg"]
 atlas = ExtResource("1_4flbx")
@@ -65,7 +65,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"down",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -79,7 +79,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"left",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -93,7 +93,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"right",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -107,7 +107,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"up",
-"speed": 5.0
+"speed": 8.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_606se"]
@@ -118,7 +118,7 @@ script = ExtResource("1_onrkg")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_bwjto")
-animation = &"down"
+animation = &"up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_606se")
